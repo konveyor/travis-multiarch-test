@@ -1,0 +1,23 @@
+language: bash
+os: linux
+services: docker
+sudo: required
+dist: bionic
+
+jobs:
+  include:
+   - stage: building ppc64le
+     arch: ppc64le
+     script: ./.travis-build.sh
+   - stage: building x86_64
+     arch: amd64
+     script: ./.travis-build.sh
+   - stage: building s390x
+     arch: s390x
+     script: ./.travis-build.sh
+   - stage: building arm64
+     arch: arm64
+     script: ./.travis-build.sh
+       #   - stage: push image
+       #arch: x86_64
+       #script: ./.travis-push.sh
