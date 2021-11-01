@@ -9,6 +9,10 @@ fi
 
 export DOCKER_CLI_EXPERIMENTAL=enabled
 
+#Without this docker manifest create fails
+#https://github.com/docker/for-linux/issues/396
+sudo chmod o+x /etc/docker
+
 docker manifest create \
   ${IMAGE}:${TAG} \
   ${IMAGE}:${TAG}-x86_64 \
