@@ -4,6 +4,9 @@ services: docker
 sudo: required
 dist: bionic
 
+env:
+  global:
+    IMAGE: quay.io/jmontleon/travis-multiarch-test
 jobs:
   include:
    - stage: building ppc64le image
