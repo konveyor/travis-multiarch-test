@@ -1,3 +1,6 @@
+#!/bin/bash
+set -x
+
 if [ "${TRAVIS_BRANCH}" == "main" ] || [ "${TRAVIS_BRANCH}" == "master" ] || [ "${TRAVIS_BRANCH}" == "konveyor-dev" ]; then
   export TAG=latest
 else
@@ -11,9 +14,11 @@ docker manifest create \
   ${IMAGE}:${TAG}-x86_64 \
   ${IMAGE}:${TAG}-ppc64le \
   ${IMAGE}:${TAG}-s390x \
-  ${IMAGE}:${TAG}-arm64
+  ${IMAGE}:${TAG}-aarch64
+echo $?
 
 docker manifest inspect ${IMAGE}:${TAG}
+echo $?
 
 docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}
 
