@@ -18,6 +18,6 @@ jobs:
    - stage: building arm64
      arch: arm64
      script: ./.travis-build.sh
-       #   - stage: push image
-       #arch: x86_64
-       #script: ./.travis-push.sh
+   - stage: push image
+     arch: x86_64
+     script: ./.travis-push.sh
