@@ -6,18 +6,18 @@ dist: bionic
 
 jobs:
   include:
-   - stage: building ppc64le
+   - stage: building ppc64le image
      arch: ppc64le
-     script: ./.travis-build.sh
-   - stage: building x86_64
+     script: ./.travis-build-image.sh
+   - stage: building x86_64 image
      arch: amd64
-     script: ./.travis-build.sh
-   - stage: building s390x
+     script: ./.travis-build-image.sh
+   - stage: building s390x image
      arch: s390x
-     script: ./.travis-build.sh
-   - stage: building arm64
+     script: ./.travis-build-image.sh
+   - stage: building arm64 image
      arch: arm64
-     script: ./.travis-build.sh
-   - stage: push image
+     script: ./.travis-build-image.sh
+   - stage: push manifest
      arch: x86_64
-     script: ./.travis-push.sh
+     script: ./.travis-push-manifest.sh
