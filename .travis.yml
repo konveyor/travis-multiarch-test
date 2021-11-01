@@ -8,6 +8,7 @@ env:
   global:
     IMAGE: quay.io/jmontleon/travis-multiarch-test
     DEFAULT_BRANCH: main
+    DOCKERFILE: Dockerfile
 jobs:
   include:
    - stage: build image
