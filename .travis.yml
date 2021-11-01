@@ -7,6 +7,7 @@ dist: bionic
 env:
   global:
     IMAGE: quay.io/jmontleon/travis-multiarch-test
+    DEFAULT_BRANCH: main
 jobs:
   include:
    - stage: build image

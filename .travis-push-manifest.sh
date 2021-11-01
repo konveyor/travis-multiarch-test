@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "${TRAVIS_BRANCH}" == "main" ] || [ "${TRAVIS_BRANCH}" == "master" ] || [ "${TRAVIS_BRANCH}" == "konveyor-dev" ]; then
+if [ "${TRAVIS_BRANCH}" == "${DEFAULT_BRANCH}" ]; then
   export TAG=latest
 else
   export TAG=${TRAVIS_BRANCH}
