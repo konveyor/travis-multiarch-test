@@ -10,7 +10,6 @@ env:
     DOCKERFILE: Dockerfile
 before_install:
   - set -e
-  - set -x
   - export TAG="${TRAVIS_BRANCH}"
   - if [ "${TRAVIS_BRANCH}" == "${DEFAULT_BRANCH}" ]; then export TAG=latest; fi
 jobs:
