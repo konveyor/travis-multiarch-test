@@ -13,16 +13,20 @@ jobs:
    - stage: build image
      arch: ppc64le
      script:
-     - travis_wait 60 ./.travis-build-image.sh
+     - docker build -t ${IMAGE}:${TRAVIS_BRANCH}-${TRAVIS_CPU_ARCH} -f ${DOCKERFILE} .
+     - ./.travis-push-image.sh
    - arch: amd64
      script:
-     - travis_wait 60 ./.travis-build-image.sh
+     - docker build -t ${IMAGE}:${TRAVIS_BRANCH}-${TRAVIS_CPU_ARCH} -f ${DOCKERFILE} .
+     - ./.travis-push-image.sh
    - arch: s390x
      script:
-     - travis_wait 60 ./.travis-build-image.sh
+     - docker build -t ${IMAGE}:${TRAVIS_BRANCH}-${TRAVIS_CPU_ARCH} -f ${DOCKERFILE} .
+     - ./.travis-push-image.sh
    - arch: arm64
      script:
-     - travis_wait 60 ./.travis-build-image.sh
+     - docker build -t ${IMAGE}:${TRAVIS_BRANCH}-${TRAVIS_CPU_ARCH} -f ${DOCKERFILE} .
+     - ./.travis-push-image.sh
    - stage: push manifest
      arch: amd64
      script: ./.travis-push-manifest.sh
