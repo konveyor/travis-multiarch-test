@@ -8,6 +8,7 @@ env:
   - IMAGE: quay.io/jmontleon/travis-multiarch-test
   - DEFAULT_BRANCH: main
   - DOCKERFILE: Dockerfile
+  - DOCKER_CLI_EXPERIMENTAL: enabled
   - "PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'"
 
 before_install:
