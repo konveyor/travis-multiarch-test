@@ -8,25 +8,39 @@ env:
     IMAGE: quay.io/jmontleon/travis-multiarch-test
     DEFAULT_BRANCH: main
     DOCKERFILE: Dockerfile
+    DOCKER_CLI_EXPERIMENTAL: enabled
+    DOCKER_BUILDX_PLATFORMS: linux/amd64,linux/arm64,linux/s390x,linux/ppc64le
+before_install:
+  - set -e
+  - export TAG="${TRAVIS_BRANCH}"
+  - if [ "${TRAVIS_BRANCH}" == "${DEFAULT_BRANCH}" ]; then export TAG=latest; fi
+  - sudo rm -rf /var/lib/apt/lists/*
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) edge"
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+  - mkdir -vp ~/.docker/cli-plugins/
+  - curl --silent -L "https://github.com/docker/buildx/releases/download/v0.6.3/buildx-v0.6.3.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
+  - chmod a+x ~/.docker/cli-plugins/docker-buildx
+  - echo '{ "features": { "buildkit": true } }' >> /etc/docker/daemon.json
+  - sudo systemctl start docker
 jobs:
   include:
-   - stage: build image
-     arch: ppc64le
-     script:
-     - docker build -t ${IMAGE}:${TRAVIS_BRANCH}-${TRAVIS_CPU_ARCH} -f ${DOCKERFILE} .
-       #- ./.travis-push-image.sh
-   - arch: amd64
-     script:
-     - docker build -t ${IMAGE}:${TRAVIS_BRANCH}-${TRAVIS_CPU_ARCH} -f ${DOCKERFILE} .
-       #- ./.travis-push-image.sh
-   - arch: s390x
-     script:
-     - docker build -t ${IMAGE}:${TRAVIS_BRANCH}-${TRAVIS_CPU_ARCH} -f ${DOCKERFILE} .
-       #- ./.travis-push-image.sh
-   - arch: arm64
-     script:
-     - docker build -t ${IMAGE}:${TRAVIS_BRANCH}-${TRAVIS_CPU_ARCH} -f ${DOCKERFILE} .
-       #- ./.travis-push-image.sh
-       #   - stage: push manifest
-       #arch: amd64
-       #script: ./.travis-push-manifest.sh
+  - stage: build image
+    script: docker buildx build --platform ${DOCKER_BUILDX_PLATFORMS} -t ${IMAGE}:${TAG}-${TRAVIS_CPU_ARCH} -f ${DOCKERFILE} .
+    # - docker build -t ${IMAGE}:${TRAVIS_BRANCH}-${TRAVIS_CPU_ARCH} -f ${DOCKERFILE} .
+    #   #- ./.travis-push-image.sh
+    #- arch: amd64
+    # script:
+    # - docker build -t ${IMAGE}:${TRAVIS_BRANCH}-${TRAVIS_CPU_ARCH} -f ${DOCKERFILE} .
+    #   #- ./.travis-push-image.sh
+    #   #- arch: s390x
+    #   #script:
+    # - docker buildx --platform -t ${IMAGE}:${TRAVIS_BRANCH}-${TRAVIS_CPU_ARCH} -f ${DOCKERFILE} .
+    #   #- ./.travis-push-image.sh
+    #- arch: arm64
+    # script:
+    # - docker build -t ${IMAGE}:${TRAVIS_BRANCH}-${TRAVIS_CPU_ARCH} -f ${DOCKERFILE} .
+    # - ./.travis-push-image.sh
+  - stage: push manifest
+    script: ./.travis-push-manifest.sh
