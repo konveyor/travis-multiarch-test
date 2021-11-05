@@ -22,19 +22,24 @@ jobs:
     - travis_wait 60 docker build -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
     - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
     - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}-${TRAVIS_ARCH}; fi
-#  - arch: s390x
-#    script:
-#    - travis_wait 60 docker build -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
-#    - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
-#    - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}-${TRAVIS_ARCH}; fi
-#  - arch: amd64
-#    script:
-#    - travis_wait 60 docker build -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
-#    - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
-#    - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}-${TRAVIS_ARCH}; fi
-#  - stage: push manifest
-#    arch: amd64
-#    script:
-#    - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
-#    - docker manifest create ${IMAGE}:${TAG} ${IMAGE}:${TAG}-x86_64 ${IMAGE}:${TAG}-ppc64le ${IMAGE}:${TAG}-s390x ${IMAGE}:${TAG}-aarch64
-#    - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}; fi 
+  - arch: s390x
+    script:
+    - travis_wait 60 docker build -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
+    - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
+    - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}-${TRAVIS_ARCH}; fi
+  - arch: amd64
+    script:
+    - travis_wait 60 docker build -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
+    - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
+    - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}-${TRAVIS_ARCH}; fi
+  - arch: arm64
+    script:
+    - travis_wait 60 docker build -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
+    - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
+    - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}-${TRAVIS_ARCH}; fi
+  - stage: push manifest
+    arch: amd64
+    script:
+    - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
+    - docker manifest create ${IMAGE}:${TAG} ${IMAGE}:${TAG}-x86_64 ${IMAGE}:${TAG}-ppc64le ${IMAGE}:${TAG}-s390x ${IMAGE}:${TAG}-aarch64
+    - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}; fi
