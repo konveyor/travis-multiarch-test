@@ -10,12 +10,13 @@ env:
     DOCKERFILE: Dockerfile
 before_install:
   - set -e
+  - set -x
   - export TAG="${TRAVIS_BRANCH}"
   - if [ "${TRAVIS_BRANCH}" == "${DEFAULT_BRANCH}" ]; then export TAG=latest; fi
 jobs:
   include:
   - stage: build image
-    arch ppc64le
+    arch: ppc64le
     script:
     - docker build -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
     - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
