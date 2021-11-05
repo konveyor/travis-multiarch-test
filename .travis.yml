@@ -43,4 +43,4 @@ jobs:
     script:
     - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
     - docker manifest create ${IMAGE}:${TAG} ${IMAGE}:${TAG}-x86_64 ${IMAGE}:${TAG}-ppc64le ${IMAGE}:${TAG}-s390x ${IMAGE}:${TAG}-aarch64
-    - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}; fi
+    - if [ -n "${QUAY_ROBOT}" ]; then manifest push ${IMAGE}:${TAG}; fi
