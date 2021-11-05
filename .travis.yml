@@ -13,16 +13,16 @@ jobs:
    - stage: build image
      arch: ppc64le
      script:
-     - travis_wait 30 ./.travis-build-image.sh
+     - travis_wait 60 ./.travis-build-image.sh
    - arch: amd64
      script:
-     - travis_wait 30 ./.travis-build-image.sh
+     - travis_wait 60 ./.travis-build-image.sh
    - arch: s390x
      script:
-     - travis_wait 30 ./.travis-build-image.sh
+     - travis_wait 60 ./.travis-build-image.sh
    - arch: arm64
      script:
-     - travis_wait 30 ./.travis-build-image.sh
+     - travis_wait 60 ./.travis-build-image.sh
    - stage: push manifest
      arch: amd64
      script: ./.travis-push-manifest.sh
