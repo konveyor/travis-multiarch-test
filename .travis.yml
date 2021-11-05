@@ -5,8 +5,8 @@ dist: bionic
 
 env:
   global:
-    IMAGE: quay.io/konveyor/oadp-operator
-    DEFAULT_BRANCH: master
+    IMAGE: quay.io/jmontleon/travis-multiarch-test
+    DEFAULT_BRANCH: main
     DOCKERFILE: Dockerfile
 jobs:
   include:
