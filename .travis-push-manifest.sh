@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ -n "${DEPLOY_ENV}" ]]; then
+if [[ -n "${QUAY_ROBOT}" ]]; then
 
   if [ "${TRAVIS_BRANCH}" == "${DEFAULT_BRANCH}" ]; then
     export TAG=latest
