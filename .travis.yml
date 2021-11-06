@@ -9,14 +9,13 @@ env:
   - DEFAULT_BRANCH: main
   - DOCKERFILE: Dockerfile
   - DOCKER_CLI_EXPERIMENTAL: enabled
-  - "PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'"
-
+  - PLATFORM: linux/s390x,linux/ppc64le,linux/arm64,linux/amd64
 before_install:
-  - set -x
   - export TAG="${TRAVIS_BRANCH}"
   - if [ "${TRAVIS_BRANCH}" == "${DEFAULT_BRANCH}" ]; then export TAG=latest; fi
+  - if [ -n "${QUAY_ROBOT}" ]; then export PUSH="--push"; fi
   - mkdir -vp ~/.docker/cli-plugins/
-  - curl --silent -L "https://github.com/docker/buildx/releases/download/v0.6.3/buildx-v0.6.3.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
+  - curl --silent -L "https://github.com/docker/buildx/releases/download/v0.7.0-rc1/buildx-v0.7.0-rc1.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
   - chmod a+x ~/.docker/cli-plugins/docker-buildx
   - docker buildx create --use
 jobs:
@@ -24,7 +23,9 @@ jobs:
   - stage: build image
     arch: amd64
     script:
-    - docker buildx build --platform linux/s390x -t ${IMAGE}:${TAG} -f ${DOCKERFILE} .
+    - sed -i 's/^RUN go mod download$//g' Dockerfile
+    - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
+    - docker buildx build ${PUSH} --platform ${PLATFORM} -t ${IMAGE}:${TAG} -f ${DOCKERFILE} .
 #    - docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
 #    - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
 #    - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}-${TRAVIS_ARCH}; fi
