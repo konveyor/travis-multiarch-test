@@ -21,6 +21,7 @@ jobs:
   include:
   - stage: build image
     arch: linux-ppc64le
+    env: TYPE=VM
     script:
     - docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
     - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
