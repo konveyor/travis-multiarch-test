@@ -1,6 +1,6 @@
 language: shell
 os: linux
-  #services: docker
+services: docker
 dist: focal
 
 env:
@@ -17,43 +17,33 @@ before_install:
     else
       export TAG="${TRAVIS_BRANCH}"
     fi
-  - sudo systemctl start docker
 
 jobs:
   include:
   - stage: build image
     arch: ppc64le
     before_script:
-    - set -x
     - |
       sed -i \
       's|^RUN go mod download$|RUN GOPROXY=https://goproxy.io,direct go mod download|g' \
       ${DOCKERFILE}
     script:
-    - |
-      travis_wait 60 sleep infinity &
-      docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
+    - docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
     - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
     - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}-${TRAVIS_ARCH}; fi
   - arch: s390x
     script:
-    - |
-      travis_wait 60 sleep infinity &
-      docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
+    - docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
     - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
     - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}-${TRAVIS_ARCH}; fi
   - arch: amd64
     script:
-    - |
-      travis_wait 60 sleep infinity &
-      docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
+    - docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
     - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
     - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}-${TRAVIS_ARCH}; fi
   - arch: arm64
     script:
-    - |
-      travis_wait 60 sleep infinity &
-      docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
+    - docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
     - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
     - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}-${TRAVIS_ARCH}; fi
   - stage: push manifest
