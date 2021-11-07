@@ -24,6 +24,8 @@ jobs:
   include:
   - stage: build image
     arch: ppc64le
+    before_script:
+    - sed -i 's/^RUN go mod download$/RUN GORPOXY=direct go mod download/g' ${DOCKERFILE} 
     script:
     - |
       travis_wait 60 sleep infinty &
