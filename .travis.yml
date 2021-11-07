@@ -25,7 +25,7 @@ jobs:
   - stage: build image
     arch: ppc64le
     before_script:
-    - sed -i 's/^RUN go mod download$/RUN GOPROXY=direct go mod download/g' ${DOCKERFILE} 
+    - sed -i 's|^RUN go mod download$|RUN GOPROXY=https://goproxy.io,direct go mod download|g' ${DOCKERFILE} 
     script:
     - |
       travis_wait 60 sleep infinty &
