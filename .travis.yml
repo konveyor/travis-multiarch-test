@@ -20,7 +20,7 @@ before_install:
 jobs:
   include:
   - stage: build image
-    arch: linux-ppc64le
+    arch: ppc64le
     env: TYPE=VM
     script:
     - docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
