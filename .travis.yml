@@ -27,7 +27,7 @@ jobs:
     - set -x
     - |
       sed -i \
-      's|^RUN go mod download$|RUN GOPROXY=https://proxy.golang.org,https://goproxy.io,direct go mod download|g' \
+      's|^RUN go mod download$|RUN GOPROXY=https://goproxy.io,direct go mod download|g' \
       ${DOCKERFILE}
     script:
     - |
