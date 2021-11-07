@@ -49,7 +49,8 @@ jobs:
       docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
     - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
     - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}-${TRAVIS_ARCH}; fi
-  - arch: linux-arm64
+  - arch: arm64-graviton2
+    virt: vm
     script:
     - |
       travis_wait 60 sleep infinity &
