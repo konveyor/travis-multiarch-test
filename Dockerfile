@@ -17,7 +17,6 @@ COPY api/ api/
 COPY pkg/ pkg/
 COPY controllers/ controllers/
 
-ENV GOPATH /go
 # Build
 RUN CGO_ENABLED=0 GOOS=linux go build -mod=mod -a -o /go/src/manager main.go
 
