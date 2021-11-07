@@ -11,6 +11,7 @@ env:
   - DOCKER_CLI_EXPERIMENTAL: enabled
 
 before_install:
+  - set -x
   - |
     if [ "${TRAVIS_BRANCH}" == "${DEFAULT_BRANCH}" ]; then
       export TAG=latest
@@ -18,12 +19,13 @@ before_install:
       export TAG="${TRAVIS_BRANCH}"
     fi
   - sudo systemctl start docker
+
 jobs:
   include:
   - stage: build image
     arch: ppc64le
     script:
-    - set -x; docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
+    - travis_wait 60 docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
     - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
     - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}-${TRAVIS_ARCH}; fi
   - arch: s390x
