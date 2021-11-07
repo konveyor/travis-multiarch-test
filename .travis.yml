@@ -1,6 +1,6 @@
 language: shell
 os: linux
-services: docker
+  #services: docker
 dist: focal
 
 env:
@@ -17,6 +17,7 @@ before_install:
     else
       export TAG="${TRAVIS_BRANCH}"
     fi
+  - sudo systemctl start docker
 jobs:
   include:
   - stage: build image
