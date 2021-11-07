@@ -9,7 +9,7 @@ COPY go.mod go.mod
 COPY go.sum go.sum
 # cache deps before building and copying source so that we don't need to re-download as much
 # and so that source changes don't invalidate our downloaded layer
-RUN go mod download
+COPY vendor/ vendor/
 
 # Copy the go source
 COPY main.go main.go
@@ -17,6 +17,7 @@ COPY api/ api/
 COPY pkg/ pkg/
 COPY controllers/ controllers/
 
+ENV GOPATH /go
 # Build
 RUN CGO_ENABLED=0 GOOS=linux go build -mod=mod -a -o /go/src/manager main.go
 

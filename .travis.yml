@@ -1,4 +1,5 @@
-language: shell
+language: go
+go: stable
 os: linux
 services: docker
 dist: focal
@@ -9,6 +10,7 @@ env:
   - DEFAULT_BRANCH: main
   - DOCKERFILE: Dockerfile
   - DOCKER_CLI_EXPERIMENTAL: enabled
+  - GOPROXY: https://goproxy.io,direct
 
 before_install:
   - |
@@ -17,16 +19,13 @@ before_install:
     else
       export TAG="${TRAVIS_BRANCH}"
     fi
-
+  - go mod vendor -v
+  - sed -i 's|^RUN go mod download$|COPY vendor/ vendor/|g' ${DOCKERFILE}
+  - sed -i 's|-mod=mod|-mod=vendor|g' ${DOCKERFILE}
 jobs:
   include:
   - stage: build image
     arch: ppc64le
-    before_script:
-    - |
-      sed -i \
-      's|^RUN go mod download$|RUN GOPROXY=https://goproxy.io,direct go mod download|g' \
-      ${DOCKERFILE}
     script:
     - |
       travis_wait 60 sleep infinity &
