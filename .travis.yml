@@ -17,12 +17,13 @@ before_install:
     else
       export TAG="${TRAVIS_BRANCH}"
     fi
+  - set -x
 jobs:
   include:
   - stage: build image
     arch: ppc64le
     script:
-    - set -xeto
+    - set -eto
     - docker build --progress=plain -t ${IMAGE}:${TAG}-${TRAVIS_ARCH} -f ${DOCKERFILE} .
     - if [ -n "${QUAY_ROBOT}" ]; then docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}; fi
     - if [ -n "${QUAY_ROBOT}" ]; then docker push ${IMAGE}:${TAG}-${TRAVIS_ARCH}; fi
