@@ -51,7 +51,7 @@ jobs:
         docker login quay.io -u "${QUAY_ROBOT}" -p ${QUAY_TOKEN}
         docker manifest create \
           ${IMAGE}:${TAG} \
-          ${IMAGE}:${TAG}-x86_64 \
+          ${IMAGE}:${TAG}-amd64 \
           ${IMAGE}:${TAG}-ppc64le \
           ${IMAGE}:${TAG}-s390x \
           ${IMAGE}:${TAG}-aarch64
