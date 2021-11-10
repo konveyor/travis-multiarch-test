@@ -3,6 +3,7 @@ services: docker
 dist: focal
 language: go
 go: stable
+group: edge
 
 env:
   global:
@@ -40,7 +41,6 @@ jobs:
     arch: ppc64le
   - arch: s390x
   - arch: arm64-graviton2
-    group: edge
   - arch: amd64
   - stage: push manifest
     language: shell
