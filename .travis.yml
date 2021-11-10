@@ -12,7 +12,7 @@ env:
   - DOCKER_CLI_EXPERIMENTAL: enabled
   - GOPROXY: https://goproxy.io,direct
 
-before_install:   
+before_install:
 - |
   if [ "${TRAVIS_BRANCH}" == "${DEFAULT_BRANCH}" ]; then
     export TAG=latest
@@ -40,6 +40,7 @@ jobs:
     arch: ppc64le
   - arch: s390x
   - arch: arm64-graviton2
+    group: edge
   - arch: amd64
   - stage: push manifest
     language: shell
